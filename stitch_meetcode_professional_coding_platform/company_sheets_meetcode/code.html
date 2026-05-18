@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Company Preparation | DevSolve</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#6ffbbe",
+                    "inverse-surface": "#e5e1e4",
+                    "inverse-on-surface": "#313032",
+                    "tertiary": "#ffb95f",
+                    "surface-bright": "#39393b",
+                    "outline-variant": "#3c4a42",
+                    "outline": "#86948a",
+                    "on-secondary": "#002e6a",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-tertiary": "#472a00",
+                    "tertiary-container": "#e29100",
+                    "error": "#ffb4ab",
+                    "surface-container": "#201f22",
+                    "on-primary-fixed": "#002113",
+                    "on-surface": "#e5e1e4",
+                    "on-secondary-fixed-variant": "#004395",
+                    "surface-container-high": "#2a2a2c",
+                    "surface": "#131315",
+                    "secondary": "#adc6ff",
+                    "surface-tint": "#4edea3",
+                    "on-primary-container": "#00422b",
+                    "surface-variant": "#353437",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "surface-dim": "#131315",
+                    "primary": "#4edea3",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary-container": "#0566d9",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-container-low": "#1c1b1d",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-background": "#e5e1e4",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-secondary-fixed": "#001a42",
+                    "background": "#131315",
+                    "on-error": "#690005",
+                    "primary-fixed-dim": "#4edea3",
+                    "on-secondary-container": "#e6ecff",
+                    "on-error-container": "#ffdad6",
+                    "inverse-primary": "#006c49",
+                    "primary-container": "#10b981",
+                    "on-primary": "#003824",
+                    "on-primary-fixed-variant": "#005236",
+                    "on-surface-variant": "#bbcabf",
+                    "on-tertiary-container": "#523200",
+                    "surface-container-highest": "#353437",
+                    "secondary-fixed": "#d8e2ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "container-max": "1440px",
+                    "column-gap": "24px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "code-block": ["JetBrains Mono"],
+                    "label-xs": ["JetBrains Mono"],
+                    "headline-xl": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "body-sm": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "body-md": ["Geist"]
+            },
+            "fontSize": {
+                    "code-block": ["14px", {"lineHeight": "1.7", "fontWeight": "450"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-xs": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #09090b; /* Level 0 Base */
+            color: #e5e1e4;
+        }
+        .border-subtle {
+            border-color: #27272a;
+        }
+        .track-card {
+            background-color: #18181b; /* Level 1 Containers */
+            transition: background-color 0.2s ease;
+        }
+        .track-card:hover {
+            background-color: #27272a;
+        }
+    </script>
+</head>
+<body class="font-body-md text-body-md antialiased">
+
+    <!-- TopNavBar -->
+    <header class="bg-surface border-b border-outline-variant docked full-width top-0 sticky z-50">
+        <div class="flex justify-between items-center h-16 w-full px-margin-desktop max-w-container-max mx-auto">
+            <div class="flex items-center gap-8">
+                <span class="font-headline-lg text-headline-lg font-bold text-primary">DevSolve</span>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="#" class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors">Problems</a>
+                    <a href="#" class="font-body-md text-body-md text-primary border-b-2 border-primary pb-2">Sheets</a>
+                    <a href="#" class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors">Contests</a>
+                    <a href="#" class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors">Dashboard</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full transition-all">search</button>
+                <button class="bg-primary text-on-primary font-bold px-6 py-2 rounded-lg hover:opacity-80 duration-150">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-container-max mx-auto px-margin-desktop py-12">
+        <!-- Hero Section -->
+        <section class="mb-16">
+            <div class="max-w-3xl">
+                <h1 class="font-headline-xl text-headline-xl mb-4 text-on-surface">Company Tracks</h1>
+                <p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+                    Master technical interviews with curated preparation sheets for top product and service-based companies. 
+                    Follow structured roadmaps designed by industry experts to ace your next placement.
+                </p>
+            </div>
+        </section>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+            
+            <!-- FAANG Roadmap (Featured Large) -->
+            <div class="md:col-span-8 track-card border border-subtle rounded-xl p-8 flex flex-col justify-between min-h-[400px] relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span class="material-symbols-outlined text-[120px]">rocket_launch</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center border border-subtle">
+                            <span class="material-symbols-outlined text-primary text-4xl">domain</span>
+                        </div>
+                        <div>
+                            <span class="text-primary font-label-xs text-label-xs uppercase tracking-widest">Premium Track</span>
+                            <h2 class="font-headline-lg text-headline-lg text-on-surface">FAANG Roadmap</h2>
+                        </div>
+                    </div>
+                    <p class="text-on-surface-variant max-w-md mb-8">Comprehensive guide to cracking Google, Amazon, Meta, Apple, and Netflix. Focuses on advanced DSA, System Design, and behavioral rounds.</p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        <span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary font-label-xs text-label-xs">Advanced DSA</span>
+                        <span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary font-label-xs text-label-xs">System Design</span>
+                        <span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary font-label-xs text-label-xs">HLD/LLD</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end">
+                        <span class="font-label-xs text-label-xs text-on-surface-variant">45 / 180 Problems Solved</span>
+                        <span class="font-label-xs text-label-xs text-primary">25% Complete</span>
+                    </div>
+                    <div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 25%"></div>
+                    </div>
+                    <div class="flex items-center gap-2 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-sm">schedule</span>
+                        <span class="font-label-xs text-label-xs">Estimated: 120 hours remaining</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TCS NQT (Small Card) -->
+            <div class="md:col-span-4 track-card border border-subtle rounded-xl p-6 flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 rounded bg-surface-container flex items-center justify-center border border-subtle">
+                            <span class="material-symbols-outlined text-on-surface">corporate_fare</span>
+                        </div>
+                        <span class="px-2 py-1 rounded bg-primary/10 text-primary font-label-xs text-label-xs">Easy</span>
+                    </div>
+                    <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">TCS NQT Preparation Sheet</h3>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="text-on-surface-variant font-label-xs text-label-xs">Strings • Quantitative • Coding</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span class="font-label-xs text-label-xs">12/45 solved</span>
+                        <span class="font-label-xs text-label-xs">18h total</span>
+                    </div>
+                    <div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 26%"></div>
+                    </div>
+                    <button class="w-full py-2 border border-subtle rounded text-on-surface font-label-xs text-label-xs hover:bg-surface-container-high transition-all">Resume Track</button>
+                </div>
+            </div>
+
+            <!-- Infosys (Small Card) -->
+            <div class="md:col-span-4 track-card border border-subtle rounded-xl p-6 flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 rounded bg-surface-container flex items-center justify-center border border-subtle text-2xl font-bold text-secondary">I</div>
+                        <span class="px-2 py-1 rounded bg-tertiary/10 text-tertiary font-label-xs text-label-xs">Medium</span>
+                    </div>
+                    <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Power Programmer</h3>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="text-on-surface-variant font-label-xs text-label-xs">Trees • Graphs • DBMS</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span class="font-label-xs text-label-xs">0/32 solved</span>
+                        <span class="font-label-xs text-label-xs">40h total</span>
+                    </div>
+                    <div class="w-full h-1 bg-surface-container-high rounded-full"></div>
+                    <button class="w-full py-2 bg-secondary text-on-secondary font-bold rounded text-on-surface font-label-xs text-label-xs hover:opacity-90 transition-all">Start Track</button>
+                </div>
+            </div>
+
+            <!-- Wipro (Small Card) -->
+            <div class="md:col-span-4 track-card border border-subtle rounded-xl p-6 flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 rounded bg-surface-container flex items-center justify-center border border-subtle">
+                            <span class="material-symbols-outlined text-primary">diversity_3</span>
+                        </div>
+                        <span class="px-2 py-1 rounded bg-primary/10 text-primary font-label-xs text-label-xs">Easy</span>
+                    </div>
+                    <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Wipro Elite Track</h3>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="text-on-surface-variant font-label-xs text-label-xs">Aptitude • Logical • Coding</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span class="font-label-xs text-label-xs">28/30 solved</span>
+                        <span class="font-label-xs text-label-xs">12h total</span>
+                    </div>
+                    <div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 93%"></div>
+                    </div>
+                    <button class="w-full py-2 border border-subtle rounded text-on-surface font-label-xs text-label-xs hover:bg-surface-container-high transition-all">Review Sheet</button>
+                </div>
+            </div>
+
+            <!-- Capgemini (Small Card) -->
+            <div class="md:col-span-4 track-card border border-subtle rounded-xl p-6 flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 rounded bg-surface-container flex items-center justify-center border border-subtle">
+                            <span class="material-symbols-outlined text-tertiary">diamond</span>
+                        </div>
+                        <span class="px-2 py-1 rounded bg-tertiary/10 text-tertiary font-label-xs text-label-xs">Medium</span>
+                    </div>
+                    <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Capgemini Excellence</h3>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="text-on-surface-variant font-label-xs text-label-xs">Pseudo Code • Game Based</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span class="font-label-xs text-label-xs">5/25 solved</span>
+                        <span class="font-label-xs text-label-xs">22h total</span>
+                    </div>
+                    <div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 20%"></div>
+                    </div>
+                    <button class="w-full py-2 border border-subtle rounded text-on-surface font-label-xs text-label-xs hover:bg-surface-container-high transition-all">Resume Track</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Call to Action / Stats Section -->
+        <section class="mt-24 bg-surface-container-low border border-subtle rounded-xl p-10 flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1">
+                <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Master Your Prep</h2>
+                <p class="text-on-surface-variant mb-6">Our algorithms track your progress across different sheets to identify weak areas. Start a track today and gain the competitive edge.</p>
+                <div class="flex gap-8">
+                    <div>
+                        <div class="text-primary font-headline-lg text-headline-lg mb-1">2.4k+</div>
+                        <div class="text-on-surface-variant font-label-xs text-label-xs uppercase">Students Prepared</div>
+                    </div>
+                    <div>
+                        <div class="text-secondary font-headline-lg text-headline-lg mb-1">500+</div>
+                        <div class="text-on-surface-variant font-label-xs text-label-xs uppercase">Company Problems</div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" 
+                     data-alt="A highly detailed close-up shot of a modern computer monitor in a dimly lit developer studio. The screen displays a complex coding environment with syntax-highlighted software engineering patterns in emerald and amber tones. Soft ambient light from the keyboard illuminates the workspace, creating a professional, focused atmosphere. The visual style is crisp, high-contrast, and minimalist, emphasizing technological precision and flow-state productivity." 
+                     class="rounded-lg border border-subtle shadow-2xl">
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface-container-lowest border-t border-outline-variant full-width bottom-0 mt-20">
+        <div class="flex flex-col md:flex-row justify-between items-center py-8 px-margin-desktop w-full max-w-container-max mx-auto">
+            <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <span class="font-headline-lg text-headline-lg font-bold text-primary">DevSolve</span>
+                <span class="font-label-xs text-label-xs text-on-surface-variant">© 2024 DevSolve Engineering</span>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="font-label-xs text-label-xs text-on-surface-variant hover:text-primary transition-colors hover:underline duration-200">GitHub</a>
+                <a href="#" class="font-label-xs text-label-xs text-on-surface-variant hover:text-primary transition-colors hover:underline duration-200">LinkedIn</a>
+                <a href="#" class="font-label-xs text-label-xs text-on-surface-variant hover:text-primary transition-colors hover:underline duration-200">Contact</a>
+                <a href="#" class="font-label-xs text-label-xs text-on-surface-variant hover:text-primary transition-colors hover:underline duration-200">Privacy</a>
+                <a href="#" class="font-label-xs text-label-xs text-on-surface-variant hover:text-primary transition-colors hover:underline duration-200">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html></style></head><body></body></html>
