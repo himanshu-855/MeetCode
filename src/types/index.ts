@@ -8,6 +8,10 @@ export interface Problem {
   createdAt: string;
   userStatus?: 'SOLVED' | 'ATTEMPTED' | null;
   _count?: { submissions: number };
+  topics?: { topic: { name: string, slug: string } }[];
+  estimatedTime?: number | null;
+  frequencyScore?: number | null;
+  companyRelevance?: string[];
 }
 
 export interface Testcase {
@@ -20,6 +24,7 @@ export interface ProblemDetail extends Problem {
   description: string;
   constraints: string[];
   testcases: Testcase[];
+  starterCode?: Record<string, string> | null;
 }
 
 export type Verdict =
@@ -52,4 +57,19 @@ export interface SubmitResult {
     actualOutput: string;
     verdict: Verdict;
   };
+}
+
+export interface LearningTrack {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  sections: TrackSection[];
+}
+
+export interface TrackSection {
+  id: string;
+  title: string;
+  order: number;
+  problems: (Problem & { isSolved: boolean })[];
 }

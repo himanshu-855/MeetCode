@@ -51,6 +51,12 @@ export default function RootLayout({
                   Problems
                 </Link>
                 <Link
+                  href="/roadmaps"
+                  className="rounded-md px-3 py-2 text-[#bbcabf] hover:bg-[#201f22] hover:text-[#e5e1e4]"
+                >
+                  Roadmaps
+                </Link>
+                <Link
                   href="/companies"
                   className="hidden rounded-md px-3 py-2 text-[#bbcabf] hover:bg-[#201f22] hover:text-[#e5e1e4] sm:inline-flex"
                 >

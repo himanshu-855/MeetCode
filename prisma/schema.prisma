@@ -7,18 +7,24 @@ datasource db {
 }
 
 model Problem {
-  id          String   @id @default(uuid())
-  slug        String   @unique
-  title       String
-  description String
-  difficulty  String
-  constraints String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(uuid())
+  slug            String   @unique
+  title           String
+  description     String
+  difficulty      String
+  constraints     String[]
+  starterCode     Json?
+  estimatedTime   Int?
+  frequencyScore  Int?
+  companyRelevance String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   testcases    Testcase[]
   submissions  Submission[]
   userStatuses UserProblemStatus[]
+  topics       ProblemTopic[]
+  trackProblems TrackProblem[]
 }
 
 model Testcase {
@@ -29,6 +35,48 @@ model Testcase {
   isHidden  Boolean @default(false)
 
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+}
+
+model Topic {
+  id    String @id @default(uuid())
+  name  String @unique
+  slug  String @unique
+  problems ProblemTopic[]
+}
+
+model ProblemTopic {
+  problemId String
+  topicId   String
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  topic     Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  @@id([problemId, topicId])
+}
+
+model LearningTrack {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String?
+  image       String?
+  sections    TrackSection[]
+}
+
+model TrackSection {
+  id          String   @id @default(uuid())
+  trackId     String
+  title       String
+  order       Int
+  track       LearningTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  problems    TrackProblem[]
+}
+
+model TrackProblem {
+  id        String   @id @default(uuid())
+  sectionId String
+  problemId String
+  order     Int
+  section   TrackSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  problem   Problem      @relation(fields: [problemId], references: [id], onDelete: Cascade)
 }
 
 model Submission {

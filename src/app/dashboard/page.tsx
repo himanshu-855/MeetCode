@@ -1,6 +1,6 @@
 import { Problem } from "@/types";
 import { DifficultyBadge } from "@/components/problems/DifficultyBadge";
-import { LayoutDashboard, Code2, TrendingUp, CheckCircle2, Trophy, Clock, Target, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Code2, TrendingUp, CheckCircle2, Trophy, Clock, Target, ChevronRight, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
@@ -27,6 +27,74 @@ async function getProblems(): Promise<Problem[]> {
   }));
 }
 
+async function getContinueLearning(userId: string) {
+  // Find last attempted but not solved problem
+  const lastAttempted = await prisma.userProblemStatus.findFirst({
+    where: { userId, status: 'ATTEMPTED' },
+    orderBy: { updatedAt: 'desc' },
+    include: { problem: true }
+  });
+
+  if (lastAttempted) return lastAttempted.problem;
+
+  // If none attempted, find first unsolved problem from any track
+  const firstUnsolved = await prisma.trackProblem.findFirst({
+    where: {
+      problem: {
+        userStatuses: {
+          none: { userId, status: 'SOLVED' }
+        }
+      }
+    },
+    orderBy: [
+      { section: { track: { slug: 'asc' } } },
+      { section: { order: 'asc' } },
+      { order: 'asc' }
+    ],
+    include: { problem: true }
+  });
+
+  return firstUnsolved?.problem || null;
+}
+
+async function getTopicMastery(userId: string) {
+  const topics = await prisma.topic.findMany({
+    include: {
+      _count: {
+        select: { problems: true }
+      }
+    }
+  });
+
+  const solvedStatuses = await prisma.userProblemStatus.findMany({
+    where: { userId, status: 'SOLVED' },
+    include: {
+      problem: {
+        include: {
+          topics: {
+            include: { topic: true }
+          }
+        }
+      }
+    }
+  });
+
+  const topicMastery = topics.map(t => {
+    const solvedInTopic = solvedStatuses.filter(s => 
+      s.problem.topics.some(pt => pt.topicId === t.id)
+    ).length;
+
+    return {
+      topic: t.name,
+      solved: solvedInTopic,
+      total: t._count.problems,
+      color: solvedInTopic === t._count.problems && t._count.problems > 0 ? "bg-[#4edea3]" : "bg-[#4edea3]/60"
+    };
+  }).filter(t => t.total > 0);
+
+  return topicMastery.slice(0, 5);
+}
+
 // Generate a deterministic activity grid (52 weeks × 7 days)
 function generateActivityGrid() {
   const cells: number[] = [];
@@ -45,45 +113,47 @@ const CELL_COLORS = [
   "bg-[#4edea3] border-[#4edea3]",
 ];
 
-const TOPIC_MASTERY = [
-  { topic: "Arrays", solved: 12, total: 20, color: "bg-[#4edea3]" },
-  { topic: "Strings", solved: 8, total: 15, color: "bg-[#4edea3]" },
-  { topic: "Dynamic Programming", solved: 3, total: 25, color: "bg-[#ffb95f]" },
-  { topic: "Graphs", solved: 1, total: 18, color: "bg-[#ffb4ab]" },
-  { topic: "Trees", solved: 5, total: 14, color: "bg-[#adc6ff]" },
-];
+interface TopicMastery {
+  topic: string;
+  solved: number;
+  total: number;
+  color: string;
+}
 
 export default async function DashboardPage() {
   const { userId } = await auth();
   const problems = await getProblems();
-  const activityCells = generateActivityGrid(); // Keeping heatmap static for now unless we implement full 52-week activity mapping
+  const activityCells = generateActivityGrid();
 
   const easy = problems.filter(p => p.difficulty === "EASY").length;
   const medium = problems.filter(p => p.difficulty === "MEDIUM").length;
   const hard = problems.filter(p => p.difficulty === "HARD").length;
 
   let totalSubs = 0;
-  let solvedEasy = 0;
+  let solvedCount = 0;
   let streak = 0;
-  const userProblems = problems.slice(0, 6);
+  let continueProblem = null;
+  let topicMastery: TopicMastery[] = [];
 
   if (userId) {
-    const subsCount = await prisma.submission.count({ where: { userId } });
-    totalSubs = subsCount;
-
-    const solvedCount = await prisma.userProblemStatus.count({
-      where: { userId, status: 'SOLVED', problem: { difficulty: 'EASY' } }
-    });
-    solvedEasy = solvedCount;
-
-    // We can simulate streak or compute from submissions. Let's just hardcode to 1 for now or 0.
-    streak = subsCount > 0 ? 1 : 0;
+    const [sCount, solved, cont, mastery] = await Promise.all([
+      prisma.submission.count({ where: { userId } }),
+      prisma.userProblemStatus.count({ where: { userId, status: 'SOLVED' } }),
+      getContinueLearning(userId),
+      getTopicMastery(userId)
+    ]);
+    
+    totalSubs = sCount;
+    solvedCount = solved;
+    continueProblem = cont;
+    topicMastery = mastery as TopicMastery[];
+    streak = sCount > 0 ? 1 : 0;
   }
 
   const stats = [
     { label: "Problems", value: problems.length, icon: Code2, color: "text-[#4edea3]", bg: "bg-[#4edea3]/10 border-[#4edea3]/20" },
-    { label: "Your Submissions", value: totalSubs, icon: TrendingUp, color: "text-[#adc6ff]", bg: "bg-[#adc6ff]/10 border-[#adc6ff]/20" },
-    { label: "Easy Solved", value: solvedEasy, icon: CheckCircle2, color: "text-[#4edea3]", bg: "bg-[#4edea3]/10 border-[#4edea3]/20" },
+    { label: "Submissions", value: totalSubs, icon: TrendingUp, color: "text-[#adc6ff]", bg: "bg-[#adc6ff]/10 border-[#adc6ff]/20" },
+    { label: "Solved", value: solvedCount, icon: CheckCircle2, color: "text-[#4edea3]", bg: "bg-[#4edea3]/10 border-[#4edea3]/20" },
     { label: "Streak", value: `${streak} days`, icon: Trophy, color: "text-[#ffb95f]", bg: "bg-[#ffb95f]/10 border-[#ffb95f]/20" },
   ];
 
@@ -92,13 +162,31 @@ export default async function DashboardPage() {
       <div className="mx-auto max-w-screen-xl px-6 py-10">
 
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-[#4edea3] text-xs font-mono uppercase tracking-widest mb-3">
-            <LayoutDashboard className="h-3.5 w-3.5" />
-            Dashboard
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-2 text-[#4edea3] text-xs font-mono uppercase tracking-widest mb-3">
+              <LayoutDashboard className="h-3.5 w-3.5" />
+              Dashboard
+            </div>
+            <h1 className="text-2xl font-bold text-[#e5e1e4] tracking-tight mb-1">Welcome back, Developer</h1>
+            <p className="text-sm text-[#86948a]">Here is your technical growth summary.</p>
           </div>
-          <h1 className="text-2xl font-bold text-[#e5e1e4] tracking-tight mb-1">Welcome back, Developer</h1>
-          <p className="text-sm text-[#86948a]">Here is your technical growth summary.</p>
+
+          {continueProblem && (
+            <Link 
+              href={`/problems/${continueProblem.slug}`}
+              className="flex items-center gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 pr-6 hover:bg-emerald-500/10 transition-all group"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 group-hover:scale-110 transition-transform">
+                <PlayCircle className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70">Continue Learning</div>
+                <div className="text-sm font-bold text-white">{continueProblem.title}</div>
+              </div>
+              <ChevronRight className="h-4 w-4 text-emerald-500/40 ml-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          )}
         </div>
 
         {/* Stats Row */}
@@ -154,7 +242,7 @@ export default async function DashboardPage() {
               <h2 className="text-sm font-semibold text-[#e5e1e4]">Topic Mastery</h2>
             </div>
             <div className="space-y-4">
-              {TOPIC_MASTERY.map(t => (
+              {topicMastery.length > 0 ? topicMastery.map(t => (
                 <div key={t.topic}>
                   <div className="flex justify-between text-xs mb-1.5">
                     <span className="text-[#bbcabf]">{t.topic}</span>
@@ -164,7 +252,9 @@ export default async function DashboardPage() {
                     <div className={`h-full ${t.color} rounded-full transition-all`} style={{ width: `${(t.solved / t.total) * 100}%` }} />
                   </div>
                 </div>
-              ))}
+              )) : (
+                <p className="text-xs text-zinc-500 py-4 text-center">No topics attempted yet.</p>
+              )}
             </div>
           </div>
 
@@ -214,7 +304,7 @@ export default async function DashboardPage() {
           </div>
           <table className="w-full text-sm">
             <tbody className="divide-y divide-[#1c1b1d]">
-              {userProblems.map(p => (
+              {problems.slice(0, 6).map(p => (
                 <tr key={p.id} className="hover:bg-[#2a2a2c] transition group">
                   <td className="px-5 py-3.5">
                     <Link href={`/problems/${p.slug}`} className="font-medium text-[#e5e1e4] group-hover:text-[#4edea3] transition-colors">
