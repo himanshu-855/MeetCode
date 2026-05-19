@@ -7,11 +7,10 @@ import { Problem, Difficulty } from "@/types";
 import { DifficultyBadge } from "./DifficultyBadge";
 import { cn } from "@/lib/utils";
 
-const TOPICS = ["Array", "String", "Hash Table", "Math", "Dynamic Programming", "Greedy", "Sorting", "Binary Search", "Tree", "Graph", "DFS/BFS", "Stack", "Recursion"];
 const DIFFICULTIES: Difficulty[] = ["EASY", "MEDIUM", "HARD"];
 const DIFF_LABELS: Record<Difficulty, string> = { EASY: "Easy", MEDIUM: "Medium", HARD: "Hard" };
 
-export function ProblemTable({ problems }: { problems: Problem[] }) {
+export function ProblemTable({ problems, allTopics }: { problems: Problem[], allTopics: string[] }) {
   const [search, setSearch] = useState("");
   const [activeDiffs, setActiveDiffs] = useState<Set<Difficulty>>(new Set());
   const [activeTopics, setActiveTopics] = useState<Set<string>>(new Set());
@@ -31,8 +30,9 @@ export function ProblemTable({ problems }: { problems: Problem[] }) {
   const filtered = useMemo(() => problems.filter(p => {
     const matchSearch = p.title.toLowerCase().includes(search.toLowerCase());
     const matchDiff = activeDiffs.size === 0 || activeDiffs.has(p.difficulty);
-    return matchSearch && matchDiff;
-  }), [problems, search, activeDiffs]);
+    const matchTopic = activeTopics.size === 0 || (p.topics && p.topics.some(t => activeTopics.has(t.topic.name)));
+    return matchSearch && matchDiff && matchTopic;
+  }), [problems, search, activeDiffs, activeTopics]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -79,7 +79,7 @@ export function ProblemTable({ problems }: { problems: Problem[] }) {
         <div>
           <h3 className="text-[10px] uppercase tracking-widest text-[#86948a] font-mono mb-3">Topics</h3>
           <div className="flex flex-wrap gap-1.5">
-            {TOPICS.map(t => (
+            {allTopics.map(t => (
               <button
                 key={t}
                 onClick={() => toggleTopic(t)}
@@ -113,6 +113,12 @@ export function ProblemTable({ problems }: { problems: Problem[] }) {
                 <span key={d} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#4edea3]/10 border border-[#4edea3]/20 text-[#4edea3] text-xs">
                   {DIFF_LABELS[d]}
                   <button onClick={() => toggleDiff(d)} className="hover:text-white">×</button>
+                </span>
+              ))}
+              {[...activeTopics].map(t => (
+                <span key={t} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#4edea3]/10 border border-[#4edea3]/20 text-[#4edea3] text-xs">
+                  {t}
+                  <button onClick={() => toggleTopic(t)} className="hover:text-white">×</button>
                 </span>
               ))}
             </div>
@@ -183,9 +189,9 @@ export function ProblemTable({ problems }: { problems: Problem[] }) {
                     <td className="px-5 py-4">
                       <Link href={`/problems/${p.slug}`} className="flex flex-col gap-1">
                         <span className="font-medium text-[#e5e1e4] group-hover:text-[#4edea3] transition-colors">{p.title}</span>
-                        <div className="flex gap-1.5">
-                          {["Array", "Hash Table"].slice(0, i % 2 + 1).map(tag => (
-                            <span key={tag} className="text-[10px] font-mono px-1.5 py-0.5 bg-[#131315] rounded text-[#86948a]">{tag}</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {p.topics?.map(({ topic }) => (
+                            <span key={topic.slug} className="text-[10px] font-mono px-1.5 py-0.5 bg-[#131315] rounded text-[#86948a]">{topic.name}</span>
                           ))}
                         </div>
                       </Link>

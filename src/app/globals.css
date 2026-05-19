@@ -1,24 +1,46 @@
 @import "tailwindcss";
+@source "../**/*.{ts,tsx}";
 
-:root {
-  /* Stitch-aligned color tokens */
-  --bg: #131315;
-  --surface: #131315;
-  --surface-low: #1c1b1d;
-  --surface-container: #201f22;
-  --surface-high: #2a2a2c;
-  --surface-highest: #353437;
-  --surface-lowest: #0e0e10;
-  --outline-variant: #3c4a42;
-  --outline: #86948a;
-  --on-surface: #e5e1e4;
-  --on-surface-variant: #bbcabf;
-  --primary: #4edea3;
-  --primary-dim: #4edea3;
-  --on-primary: #003824;
-  --tertiary: #ffb95f;
-  --error: #ffb4ab;
-  --secondary: #adc6ff;
+@theme {
+  --color-bg: #131315;
+  --color-surface: #131315;
+  --color-surface-low: #1c1b1d;
+  --color-surface-container: #201f22;
+  --color-surface-high: #2a2a2c;
+  --color-surface-highest: #353437;
+  --color-surface-lowest: #0e0e10;
+  --color-outline-variant: #3c4a42;
+  --color-outline: #86948a;
+  --color-on-surface: #e5e1e4;
+  --color-on-surface-variant: #bbcabf;
+  --color-primary: #4edea3;
+  --color-primary-dim: #4edea3;
+  --color-on-primary: #003824;
+  --color-tertiary: #ffb95f;
+  --color-error: #ffb4ab;
+  --color-secondary: #adc6ff;
+}
+
+@layer base {
+  :root {
+    --bg: #131315;
+    --surface: #131315;
+    --surface-low: #1c1b1d;
+    --surface-container: #201f22;
+    --surface-high: #2a2a2c;
+    --surface-highest: #353437;
+    --surface-lowest: #0e0e10;
+    --outline-variant: #3c4a42;
+    --outline: #86948a;
+    --on-surface: #e5e1e4;
+    --on-surface-variant: #bbcabf;
+    --primary: #4edea3;
+    --primary-dim: #4edea3;
+    --on-primary: #003824;
+    --tertiary: #ffb95f;
+    --error: #ffb4ab;
+    --secondary: #adc6ff;
+  }
 }
 
 /* Scrollbar */

@@ -1,0 +1,25 @@
+{
+  "title": "Striver A2Z Sheet",
+  "slug": "striver-a2z-sheet",
+  "description": "The ultimate roadmap for DSA preparation, covering everything from basics to advanced topics.",
+  "sections": [
+    {
+      "title": "Arrays Basics",
+      "order": 1,
+      "problems": [
+        "maximum-element-in-an-array",
+        "second-largest-element",
+        "check-if-array-is-sorted",
+        "remove-duplicates-from-sorted-array",
+        "left-rotate-array-by-one",
+        "move-zeroes-to-end",
+        "linear-search",
+        "union-of-two-sorted-arrays",
+        "missing-number",
+        "max-consecutive-ones",
+        "single-number",
+        "longest-subarray-with-sum-k"
+      ]
+    }
+  ]
+}

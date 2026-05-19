@@ -1,10 +1,10 @@
-import { ProblemTable } from "@/components/problems/ProblemTable";
 import { Difficulty, Problem } from "@/types";
+import { ProblemTable } from "@/components/problems/ProblemTable";
+import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { BookOpen } from "lucide-react";
-import { prisma } from "@/lib/prisma";
 
-async function getProblems(): Promise<Problem[]> {
+async function getProblemsData(): Promise<{ problems: Problem[], allTopics: string[] }> {
   const problems = await prisma.problem.findMany({
     select: {
       id: true,
@@ -12,6 +12,11 @@ async function getProblems(): Promise<Problem[]> {
       title: true,
       difficulty: true,
       createdAt: true,
+      topics: {
+        include: {
+          topic: true
+        }
+      },
       _count: {
         select: { submissions: true },
       },
@@ -20,29 +25,31 @@ async function getProblems(): Promise<Problem[]> {
   });
 
   const { userId } = await auth();
-  const statuses: Record<string, Problem["userStatus"]> = {};
+  const statuses = userId 
+    ? await prisma.userProblemStatus.findMany({
+        where: { userId },
+        select: { problemId: true, status: true }
+      })
+    : [];
 
-  if (userId) {
-    const userStatuses = await prisma.userProblemStatus.findMany({
-      where: { userId },
-      select: { problemId: true, status: true },
-    });
+  const statusMap = new Map(statuses.map(s => [s.problemId, s.status]));
 
-    userStatuses.forEach((status) => {
-      statuses[status.problemId] = status.status;
-    });
-  }
+  const allTopicsSet = new Set<string>();
+  problems.forEach(p => p.topics.forEach(t => allTopicsSet.add(t.topic.name)));
 
-  return problems.map((problem) => ({
-    ...problem,
-    difficulty: problem.difficulty as Difficulty,
-    createdAt: problem.createdAt.toISOString(),
-    userStatus: statuses[problem.id] ?? null,
-  }));
+  return {
+    problems: problems.map((problem) => ({
+      ...problem,
+      difficulty: problem.difficulty as Difficulty,
+      createdAt: problem.createdAt.toISOString(),
+      userStatus: (statusMap.get(problem.id) as Problem['userStatus']) ?? null,
+    })),
+    allTopics: Array.from(allTopicsSet).sort()
+  };
 }
 
 export default async function ProblemsPage() {
-  const problems = await getProblems();
+  const { problems, allTopics } = await getProblemsData();
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -84,7 +91,7 @@ export default async function ProblemsPage() {
           ))}
         </div>
 
-        <ProblemTable problems={problems} />
+        <ProblemTable problems={problems} allTopics={allTopics} />
       </div>
     </div>
   );

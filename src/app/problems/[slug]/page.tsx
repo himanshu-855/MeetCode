@@ -20,6 +20,11 @@ async function getProblem(slug: string): Promise<ProblemDetail | null> {
           output: true,
         },
       },
+      topics: {
+        include: {
+          topic: true
+        }
+      },
       _count: {
         select: { submissions: true },
       },
@@ -47,7 +52,8 @@ async function getProblem(slug: string): Promise<ProblemDetail | null> {
     ...problem,
     difficulty: problem.difficulty as Difficulty,
     createdAt: problem.createdAt.toISOString(),
-    userStatus: status?.status ?? null,
+    userStatus: (status?.status as ProblemDetail['userStatus']) ?? null,
+    starterCode: problem.starterCode as ProblemDetail['starterCode'],
   };
 }
 

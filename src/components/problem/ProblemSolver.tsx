@@ -225,11 +225,15 @@ export function ProblemSolver({
 
   useEffect(() => {
     const cfg = getLanguageConfig(language);
-    if (cfg) setCode(cfg.template);
+    if (problem.starterCode && (problem.starterCode as Record<string, string>)[language]) {
+      setCode((problem.starterCode as Record<string, string>)[language]);
+    } else if (cfg) {
+      setCode(cfg.template);
+    }
     clearRun();
     clearSubmit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
+  }, [language, problem.starterCode]);
 
   const handleRun = useCallback(() => {
     if (!isAuthenticated) return;
@@ -291,9 +295,30 @@ export function ProblemSolver({
             {leftTab === "description" && (
               <div className="p-6 space-y-6">
                 {/* Header */}
-                <div className="flex items-start justify-between gap-3">
-                  <h1 className="text-lg font-bold text-[#e5e1e4] leading-tight">{problem.title}</h1>
-                  <DifficultyBadge difficulty={problem.difficulty} />
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <h1 className="text-lg font-bold text-[#e5e1e4] leading-tight">{problem.title}</h1>
+                    <DifficultyBadge difficulty={problem.difficulty} />
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center gap-2">
+                    {problem.topics?.map(({ topic }) => (
+                      <span key={topic.slug} className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#201f22] text-[#86948a] border border-[#3c4a42]">
+                        {topic.name}
+                      </span>
+                    ))}
+                    {problem.estimatedTime && (
+                      <span className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <Clock className="h-3 w-3" />
+                        {problem.estimatedTime} mins
+                      </span>
+                    )}
+                    {problem.companyRelevance?.map((company) => (
+                      <span key={company} className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        {company}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Description */}

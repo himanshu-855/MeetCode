@@ -1,0 +1,11 @@
+[
+  { "name": "Arrays", "slug": "arrays" },
+  { "name": "Hashing", "slug": "hashing" },
+  { "name": "Two Pointers", "slug": "two-pointers" },
+  { "name": "Prefix Sum", "slug": "prefix-sum" },
+  { "name": "Sorting", "slug": "sorting" },
+  { "name": "Binary Search", "slug": "binary-search" },
+  { "name": "Recursion", "slug": "recursion" },
+  { "name": "Graphs", "slug": "graphs" },
+  { "name": "Dynamic Programming", "slug": "dynamic-programming" }
+]
